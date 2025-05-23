@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}发票记录 - 广告管理系统{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">发票记录</h4>
+        <a href="{{ url_for('main.payment_history') }}" class="btn btn-primary">申请新发票</a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>发票号</th>
+                        <th>金额</th>
+                        <th>类型</th>
+                        <th>单位名称</th>
+                        <th>税号</th>
+                        <th>状态</th>
+                        <th>申请时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in invoices %}
+                    <tr>
+                        <td>{{ invoice.invoice_number }}</td>
+                        <td>¥{{ invoice.amount }}</td>
+                        <td>
+                            {% if invoice.invoice_type == 'personal' %}
+                            个人发票
+                            {% else %}
+                            企业发票
+                            {% endif %}
+                        </td>
+                        <td>{{ invoice.company_name }}</td>
+                        <td>{{ invoice.tax_number or '-' }}</td>
+                        <td>
+                            <span class="badge {% if invoice.status == 'issued' %}bg-success
+                                            {% elif invoice.status == 'pending' %}bg-warning
+                                            {% else %}bg-danger{% endif %}">
+                                {% if invoice.status == 'issued' %}
+                                已开具
+                                {% elif invoice.status == 'pending' %}
+                                待处理
+                                {% else %}
+                                已拒绝
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td>{{ invoice.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>
+                            {% if invoice.status == 'issued' %}
+                            <a href="{{ url_for('main.invoice_preview', id=invoice.id) }}"
+                                class="btn btn-sm btn-info">预览</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function downloadInvoice(invoiceNumber) {
+        // 这里添加下载发票的逻辑
+        alert('发票下载功能开发中...');
+    }
+</script>
+{% endblock %}

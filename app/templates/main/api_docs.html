@@ -1,0 +1,507 @@
+{% extends "base.html" %}
+
+{% block title %}API文档 - 广告管理系统{% endblock %}
+
+{% block content %}
+<div class="api-docs">
+    <div class="container">
+        <!-- 侧边导航 -->
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="api-nav">
+                    <h5 class="mb-3">目录</h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#introduction">介绍</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#authentication">认证</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#ads">广告接口</a>
+                            <ul class="nav flex-column ms-3">
+                                <li><a class="nav-link" href="#get-ads">获取广告列表</a></li>
+                                <li><a class="nav-link" href="#get-ad">获取单个广告</a></li>
+                                <li><a class="nav-link" href="#create-ad">创建广告</a></li>
+                                <li><a class="nav-link" href="#update-ad">更新广告</a></li>
+                                <li><a class="nav-link" href="#delete-ad">删除广告</a></li>
+                                <li><a class="nav-link" href="#withdraw-ad">撤回广告</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#stats">统计接口</a>
+                            <ul class="nav flex-column ms-3">
+                                <li><a class="nav-link" href="#impression">展示统计</a></li>
+                                <li><a class="nav-link" href="#click">点击统计</a></li>
+                                <li><a class="nav-link" href="#conversion">转化统计</a></li>
+                                <li><a class="nav-link" href="#daily-stats">每日统计</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#payment">支付接口</a>
+                            <ul class="nav flex-column ms-3">
+                                <li><a class="nav-link" href="#create-payment">创建支付</a></li>
+                                <li><a class="nav-link" href="#payment-status">支付状态</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#errors">错误码</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 主要内容 -->
+            <div class="col-lg-9">
+                <!-- 介绍 -->
+                <section id="introduction" class="api-section">
+                    <h2>介绍</h2>
+                    <p>广告管理系统API提供了完整的广告管理功能，包括广告的创建、更新、删除、展示和统计等功能。所有API都遵循RESTful设计规范，使用JSON作为数据交换格式。</p>
+
+                    <h4>基础URL</h4>
+                    <div class="code-block">
+                        <pre><code>https://api.example.com/v1</code></pre>
+                    </div>
+
+                    <h4>支持的HTTP方法</h4>
+                    <ul>
+                        <li>GET - 获取资源</li>
+                        <li>POST - 创建资源</li>
+                        <li>PUT - 更新资源</li>
+                        <li>DELETE - 删除资源</li>
+                    </ul>
+                </section>
+
+                <!-- 认证 -->
+                <section id="authentication" class="api-section">
+                    <h2>认证</h2>
+                    <p>所有API请求都需要在Header中包含API密钥进行认证。</p>
+
+                    <div class="code-block">
+                        <pre><code>Authorization: Bearer YOUR_API_KEY</code></pre>
+                    </div>
+
+                    <h4>获取API密钥</h4>
+                    <p>在管理后台的"开发者设置"页面可以生成和管理API密钥。</p>
+                </section>
+
+                <!-- 广告接口 -->
+                <section id="ads" class="api-section">
+                    <h2>广告接口</h2>
+
+                    <!-- 获取广告列表 -->
+                    <div id="get-ads" class="api-endpoint">
+                        <h3>获取广告列表</h3>
+                        <div class="endpoint-info">
+                            <span class="method get">GET</span>
+                            <span class="url">/ads</span>
+                        </div>
+
+                        <h4>请求参数</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>参数</th>
+                                    <th>类型</th>
+                                    <th>必填</th>
+                                    <th>描述</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>page</td>
+                                    <td>integer</td>
+                                    <td>否</td>
+                                    <td>页码，默认1</td>
+                                </tr>
+                                <tr>
+                                    <td>size</td>
+                                    <td>integer</td>
+                                    <td>否</td>
+                                    <td>每页数量，默认10</td>
+                                </tr>
+                                <tr>
+                                    <td>status</td>
+                                    <td>string</td>
+                                    <td>否</td>
+                                    <td>广告状态：active/pending/rejected/completed</td>
+                                </tr>
+                                <tr>
+                                    <td>type</td>
+                                    <td>string</td>
+                                    <td>否</td>
+                                    <td>广告类型：banner/video/native</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>响应示例</h4>
+                        <div class="code-block">
+                            <pre><code>{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "total": 100,
+        "items": [
+            {
+                "id": "123",
+                "title": "示例广告",
+                "description": "广告描述",
+                "type": "banner",
+                "status": "active",
+                "start_date": "2024-01-01",
+                "end_date": "2024-12-31",
+                "budget": 1000.00,
+                "created_at": "2024-01-01T00:00:00Z"
+            }
+        ]
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- 创建广告 -->
+                    <div id="create-ad" class="api-endpoint">
+                        <h3>创建广告</h3>
+                        <div class="endpoint-info">
+                            <span class="method post">POST</span>
+                            <span class="url">/ads</span>
+                        </div>
+
+                        <h4>请求参数</h4>
+                        <div class="code-block">
+                            <pre><code>{
+    "title": "广告标题",
+    "description": "广告描述",
+    "type": "banner",
+    "content_url": "https://example.com/ad.jpg",
+    "target_url": "https://example.com",
+    "start_date": "2024-01-01",
+    "end_date": "2024-12-31",
+    "budget": 1000.00,
+    "targeting": {
+        "locations": ["北京", "上海"],
+        "age_range": [18, 35],
+        "interests": ["科技", "游戏"]
+    }
+}</code></pre>
+                        </div>
+
+                        <h4>响应示例</h4>
+                        <div class="code-block">
+                            <pre><code>{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "id": "123",
+        "title": "广告标题",
+        "status": "pending",
+        "created_at": "2024-01-01T00:00:00Z"
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- 撤回广告 -->
+                    <div id="withdraw-ad" class="api-endpoint">
+                        <h3>撤回广告</h3>
+                        <div class="endpoint-info">
+                            <span class="method post">POST</span>
+                            <span class="url">/ads/{id}/withdraw</span>
+                        </div>
+
+                        <h4>说明</h4>
+                        <p>撤回待审核状态的广告，撤回后广告将被永久删除。</p>
+
+                        <h4>响应示例</h4>
+                        <div class="code-block">
+                            <pre><code>{
+    "code": 0,
+    "message": "广告已成功撤回",
+    "data": null
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 统计接口 -->
+                <section id="stats" class="api-section">
+                    <h2>统计接口</h2>
+
+                    <!-- 展示统计 -->
+                    <div id="impression" class="api-endpoint">
+                        <h3>展示统计</h3>
+                        <div class="endpoint-info">
+                            <span class="method post">POST</span>
+                            <span class="url">/stats/impression</span>
+                        </div>
+
+                        <h4>请求参数</h4>
+                        <div class="code-block">
+                            <pre><code>{
+    "ad_id": "123",
+    "user_id": "456",
+    "platform": "web",
+    "device": "desktop",
+    "location": "北京",
+    "timestamp": "2024-01-01T00:00:00Z"
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- 每日统计 -->
+                    <div id="daily-stats" class="api-endpoint">
+                        <h3>每日统计</h3>
+                        <div class="endpoint-info">
+                            <span class="method get">GET</span>
+                            <span class="url">/stats/daily</span>
+                        </div>
+
+                        <h4>请求参数</h4>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>参数</th>
+                                    <th>类型</th>
+                                    <th>必填</th>
+                                    <th>描述</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ad_id</td>
+                                    <td>string</td>
+                                    <td>是</td>
+                                    <td>广告ID</td>
+                                </tr>
+                                <tr>
+                                    <td>start_date</td>
+                                    <td>string</td>
+                                    <td>否</td>
+                                    <td>开始日期，格式：YYYY-MM-DD</td>
+                                </tr>
+                                <tr>
+                                    <td>end_date</td>
+                                    <td>string</td>
+                                    <td>否</td>
+                                    <td>结束日期，格式：YYYY-MM-DD</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>响应示例</h4>
+                        <div class="code-block">
+                            <pre><code>{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "total": {
+            "impressions": 1000,
+            "clicks": 50,
+            "ctr": 5.0,
+            "spent": 500.00
+        },
+        "daily": [
+            {
+                "date": "2024-01-01",
+                "impressions": 100,
+                "clicks": 5,
+                "ctr": 5.0,
+                "spent": 50.00
+            }
+        ]
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 支付接口 -->
+                <section id="payment" class="api-section">
+                    <h2>支付接口</h2>
+
+                    <!-- 创建支付 -->
+                    <div id="create-payment" class="api-endpoint">
+                        <h3>创建支付</h3>
+                        <div class="endpoint-info">
+                            <span class="method post">POST</span>
+                            <span class="url">/payments</span>
+                        </div>
+
+                        <h4>请求参数</h4>
+                        <div class="code-block">
+                            <pre><code>{
+    "amount": 1000.00,
+    "payment_method": "alipay",
+    "return_url": "https://example.com/return"
+}</code></pre>
+                        </div>
+
+                        <h4>响应示例</h4>
+                        <div class="code-block">
+                            <pre><code>{
+    "code": 0,
+    "message": "success",
+    "data": {
+        "payment_id": "PAY123456",
+        "payment_url": "https://pay.example.com/PAY123456"
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 错误码 -->
+                <section id="errors" class="api-section">
+                    <h2>错误码</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>错误码</th>
+                                <th>描述</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>0</td>
+                                <td>成功</td>
+                            </tr>
+                            <tr>
+                                <td>1001</td>
+                                <td>认证失败</td>
+                            </tr>
+                            <tr>
+                                <td>1002</td>
+                                <td>参数错误</td>
+                            </tr>
+                            <tr>
+                                <td>1003</td>
+                                <td>资源不存在</td>
+                            </tr>
+                            <tr>
+                                <td>1004</td>
+                                <td>权限不足</td>
+                            </tr>
+                            <tr>
+                                <td>1005</td>
+                                <td>余额不足</td>
+                            </tr>
+                            <tr>
+                                <td>1006</td>
+                                <td>广告状态错误</td>
+                            </tr>
+                            <tr>
+                                <td>1007</td>
+                                <td>支付失败</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .api-docs {
+        padding: 40px 0;
+    }
+
+    .api-nav {
+        position: sticky;
+        top: 20px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .api-nav .nav-link {
+        color: #616161;
+        padding: 8px 0;
+    }
+
+    .api-nav .nav-link:hover {
+        color: #0078d4;
+    }
+
+    .api-section {
+        margin-bottom: 40px;
+    }
+
+    .api-endpoint {
+        margin-bottom: 30px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .endpoint-info {
+        display: flex;
+        align-items: center;
+        margin: 16px 0;
+    }
+
+    .method {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-right: 12px;
+    }
+
+    .method.get {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .method.post {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .method.put {
+        background: #fff3e0;
+        color: #f57c00;
+    }
+
+    .method.delete {
+        background: #ffebee;
+        color: #d32f2f;
+    }
+
+    .url {
+        font-family: monospace;
+        color: #616161;
+    }
+
+    .code-block {
+        background: #f5f5f5;
+        border-radius: 4px;
+        padding: 16px;
+        margin: 16px 0;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 0.875rem;
+        color: #323130;
+    }
+
+    .table {
+        margin: 16px 0;
+    }
+
+    .table th {
+        background: #f5f5f5;
+    }
+
+    @media (max-width: 768px) {
+        .api-nav {
+            position: static;
+            margin-bottom: 20px;
+        }
+    }
+</style>
+{% endblock %}

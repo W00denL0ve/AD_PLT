@@ -1,0 +1,481 @@
+{% extends "base.html" %}
+
+{% block title %}首页 - 广告管理系统{% endblock %}
+
+{% block content %}
+<!-- 英雄区域 -->
+<div class="hero-section position-relative overflow-hidden">
+    <div class="hero-content">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">智能广告管理平台</h1>
+                    <p class="lead mb-5">基于AI的精准投放，让您的广告更智能、更高效</p>
+                    {% if not current_user.is_authenticated %}
+                    <div class="d-flex gap-3">
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">立即开始</a>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-dark btn-lg">了解更多</a>
+                    </div>
+                    {% else %}
+                    <div>
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg">进入控制台</a>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-lg-6 d-none d-lg-block">
+                    <div class="hero-image">
+                        <img src="https://img.freepik.com/free-vector/digital-marketing-concept-illustration_114360-843.jpg"
+                            alt="智能广告" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 特性展示 -->
+<div class="features-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">为什么选择我们</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    <h3>智能投放</h3>
+                    <p>基于AI算法的精准投放系统，让您的广告触达目标用户</p>
+                    <a href="#" class="feature-link">了解更多 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-bar-chart-line"></i>
+                    </div>
+                    <h3>数据洞察</h3>
+                    <p>全方位的数据分析，助您做出明智的营销决策</p>
+                    <a href="#" class="feature-link">了解更多 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3>安全可靠</h3>
+                    <p>企业级安全保障，让您的广告投放更安心</p>
+                    <a href="#" class="feature-link">了解更多 <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 数据统计 -->
+<div class="stats-section py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number" data-count="99.9">0</div>
+                    <div class="stat-label">系统可用性</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number" data-count="50">0</div>
+                    <div class="stat-label">日均展示量(百万)</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number" data-count="10">0</div>
+                    <div class="stat-label">活跃广告主(千)</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-number" data-count="200">0</div>
+                    <div class="stat-label">广告类型</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 技术优势 -->
+<div class="tech-section py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="mb-4">技术优势</h2>
+                <div class="tech-features">
+                    <div class="tech-feature">
+                        <i class="bi bi-cpu"></i>
+                        <div>
+                            <h4>AI智能算法</h4>
+                            <p>采用先进的机器学习算法，实现广告的智能投放和优化</p>
+                        </div>
+                    </div>
+                    <div class="tech-feature">
+                        <i class="bi bi-cloud"></i>
+                        <div>
+                            <h4>云原生架构</h4>
+                            <p>基于云原生技术，确保系统的高可用性和可扩展性</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="https://img.freepik.com/free-vector/cloud-storage-concept-illustration_114360-700.jpg"
+                    alt="技术优势" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- API接口展示 -->
+<div class="api-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">开发者接口</h2>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="api-card">
+                    <div class="api-header">
+                        <h3>广告投放接口</h3>
+                        <span class="badge bg-success">REST API</span>
+                    </div>
+                    <div class="api-content">
+                        <div class="api-endpoint">
+                            <div class="method get">GET</div>
+                            <div class="url">/api/v1/ads</div>
+                        </div>
+                        <p class="api-desc">获取广告列表，支持分页和筛选</p>
+                        <div class="code-block">
+                            <pre><code>curl -X GET "https://api.example.com/v1/ads?page=1&size=10" \
+-H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-card">
+                    <div class="api-header">
+                        <h3>广告展示接口</h3>
+                        <span class="badge bg-success">REST API</span>
+                    </div>
+                    <div class="api-content">
+                        <div class="api-endpoint">
+                            <div class="method post">POST</div>
+                            <div class="url">/api/v1/ads/impression</div>
+                        </div>
+                        <p class="api-desc">记录广告展示数据</p>
+                        <div class="code-block">
+                            <pre><code>curl -X POST "https://api.example.com/v1/ads/impression" \
+-H "Authorization: Bearer YOUR_API_KEY" \
+-d '{"ad_id": "123", "user_id": "456"}'</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="api-card">
+                    <div class="api-header">
+                        <h3>广告点击接口</h3>
+                        <span class="badge bg-success">REST API</span>
+                    </div>
+                    <div class="api-content">
+                        <div class="api-endpoint">
+                            <div class="method post">POST</div>
+                            <div class="url">/api/v1/ads/click</div>
+                        </div>
+                        <p class="api-desc">记录广告点击数据</p>
+                        <div class="code-block">
+                            <pre><code>curl -X POST "https://api.example.com/v1/ads/click" \
+-H "Authorization: Bearer YOUR_API_KEY" \
+-d '{"ad_id": "123", "user_id": "456"}'</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-card">
+                    <div class="api-header">
+                        <h3>广告统计接口</h3>
+                        <span class="badge bg-success">REST API</span>
+                    </div>
+                    <div class="api-content">
+                        <div class="api-endpoint">
+                            <div class="method get">GET</div>
+                            <div class="url">/api/v1/ads/stats</div>
+                        </div>
+                        <p class="api-desc">获取广告统计数据</p>
+                        <div class="code-block">
+                            <pre><code>curl -X GET "https://api.example.com/v1/ads/stats?ad_id=123&start_date=2024-01-01&end_date=2024-01-31" \
+-H "Authorization: Bearer YOUR_API_KEY"</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="/api-docs" class="btn btn-primary btn-lg">查看完整API文档</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 英雄区域样式 */
+    .hero-section {
+        background: #fff;
+        padding: 80px 0;
+        position: relative;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-image {
+        position: relative;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-20px);
+        }
+
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    /* 特性卡片样式 */
+    .feature-card {
+        background: #fff;
+        padding: 30px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-icon {
+        font-size: 2rem;
+        color: #0078d4;
+        margin-bottom: 20px;
+    }
+
+    .feature-link {
+        color: #0078d4;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        margin-top: 15px;
+        font-weight: 500;
+    }
+
+    .feature-link:hover {
+        color: #106ebe;
+    }
+
+    /* 数据统计样式 */
+    .stat-card {
+        text-align: center;
+        padding: 30px;
+    }
+
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 600;
+        color: #0078d4;
+        margin-bottom: 10px;
+    }
+
+    .stat-label {
+        color: #616161;
+        font-size: 1.1rem;
+    }
+
+    /* 技术优势样式 */
+    .tech-features {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .tech-feature {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .tech-feature i {
+        font-size: 2rem;
+        color: #0078d4;
+    }
+
+    .tech-feature h4 {
+        color: #323130;
+        margin-bottom: 10px;
+    }
+
+    .tech-feature p {
+        color: #616161;
+        margin: 0;
+    }
+
+    /* 按钮样式 */
+    .btn-primary {
+        background-color: #0078d4;
+        border-color: #0078d4;
+    }
+
+    .btn-primary:hover {
+        background-color: #106ebe;
+        border-color: #106ebe;
+    }
+
+    .btn-outline-dark {
+        color: #323130;
+        border-color: #323130;
+    }
+
+    .btn-outline-dark:hover {
+        background-color: #323130;
+        color: #fff;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 768px) {
+        .hero-section {
+            padding: 40px 0;
+        }
+
+        .feature-card {
+            margin-bottom: 20px;
+        }
+    }
+
+    /* API接口样式 */
+    .api-section {
+        background: #f8f9fa;
+    }
+
+    .api-card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .api-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .api-header h3 {
+        margin: 0;
+        color: #323130;
+        font-size: 1.25rem;
+    }
+
+    .api-endpoint {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .method {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-right: 12px;
+    }
+
+    .method.get {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .method.post {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .url {
+        font-family: monospace;
+        color: #616161;
+    }
+
+    .api-desc {
+        color: #616161;
+        margin-bottom: 16px;
+    }
+
+    .code-block {
+        background: #f5f5f5;
+        border-radius: 4px;
+        padding: 16px;
+        margin-top: 16px;
+    }
+
+    .code-block pre {
+        margin: 0;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 0.875rem;
+        color: #323130;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+</style>
+
+<script>
+    // 数字增长动画
+    function animateNumbers() {
+        const numbers = document.querySelectorAll('.stat-number');
+
+        numbers.forEach(number => {
+            const target = parseFloat(number.getAttribute('data-count'));
+            const duration = 2000; // 动画持续时间（毫秒）
+            const step = target / (duration / 16); // 每16ms更新一次
+            let current = 0;
+
+            const updateNumber = () => {
+                current += step;
+                if (current < target) {
+                    number.textContent = current.toFixed(1);
+                    requestAnimationFrame(updateNumber);
+                } else {
+                    number.textContent = target.toFixed(1);
+                }
+            };
+
+            updateNumber();
+        });
+    }
+
+    // 页面加载完成后执行动画
+    document.addEventListener('DOMContentLoaded', animateNumbers);
+</script>
+{% endblock %}
