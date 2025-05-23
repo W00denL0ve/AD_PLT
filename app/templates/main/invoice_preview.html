@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}发票预览 - 广告管理系统{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">发票预览</h4>
+        <div>
+            <button class="btn btn-primary" onclick="window.print()">打印发票</button>
+            <a href="{{ url_for('main.invoice_history') }}" class="btn btn-secondary">返回列表</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="invoice-preview p-4 border">
+            <div class="text-center mb-4">
+                <h3>广告服务发票</h3>
+                <p class="text-muted">发票号码：{{ invoice.invoice_number }}</p>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>开票信息</h5>
+                    <p><strong>单位名称：</strong>{{ invoice.company_name }}</p>
+                    <p><strong>税号：</strong>{{ invoice.tax_number or '无' }}</p>
+                    <p><strong>地址：</strong>{{ invoice.address }}</p>
+                    <p><strong>电话：</strong>{{ invoice.phone }}</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <h5>发票信息</h5>
+                    <p><strong>开票日期：</strong>{{ invoice.created_at.strftime('%Y-%m-%d') }}</p>
+                    <p><strong>发票类型：</strong>
+                        {% if invoice.invoice_type == 'personal' %}
+                        个人发票
+                        {% else %}
+                        企业发票
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>服务项目</th>
+                            <th>金额</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>广告服务费</td>
+                            <td>¥{{ invoice.amount }}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>合计</th>
+                            <th>¥{{ invoice.amount }}</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>收款单位：</strong>广告管理系统</p>
+                    <p><strong>开户行：</strong>示例银行</p>
+                    <p><strong>账号：</strong>1234567890</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p><strong>开票人：</strong>系统管理员</p>
+                    <p><strong>开票日期：</strong>{{ invoice.created_at.strftime('%Y-%m-%d') }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @media print {
+
+        .navbar,
+        .card-header,
+        .btn {
+            display: none !important;
+        }
+
+        .invoice-preview {
+            border: none !important;
+        }
+
+        .card {
+            border: none !important;
+        }
+
+        .card-body {
+            padding: 0 !important;
+        }
+    }
+</style>
+{% endblock %}

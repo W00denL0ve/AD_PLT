@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}广告统计 - 广告管理系统{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">广告统计 - {{ ad.title }}</h5>
+            <a href="{{ url_for('main.purchased_ads') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> 返回列表
+            </a>
+        </div>
+        <div class="card-body">
+            <!-- 统计概览 -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <h6 class="card-title">展示次数</h6>
+                            <h3 class="mb-0">{{ stats.impressions|default(0) }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <h6 class="card-title">点击次数</h6>
+                            <h3 class="mb-0">{{ stats.clicks|default(0) }}</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-info text-white">
+                        <div class="card-body">
+                            <h6 class="card-title">点击率</h6>
+                            <h3 class="mb-0">{{ "%.2f"|format(stats.ctr|default(0)) }}%</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <h6 class="card-title">消耗金额</h6>
+                            <h3 class="mb-0">¥{{ "%.2f"|format(stats.spent|default(0)) }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 趋势图表 -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0">数据趋势</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="trendChart" height="300"></canvas>
+                </div>
+            </div>
+
+            <!-- 详细数据表格 -->
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">详细数据</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>日期</th>
+                                    <th>展示次数</th>
+                                    <th>点击次数</th>
+                                    <th>点击率</th>
+                                    <th>消耗金额</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in daily_stats %}
+                                <tr>
+                                    <td>{{ record.date }}</td>
+                                    <td>{{ record.impressions }}</td>
+                                    <td>{{ record.clicks }}</td>
+                                    <td>{{ "%.2f"|format(record.ctr) }}%</td>
+                                    <td>¥{{ "%.2f"|format(record.spent) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('trendChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ dates| tojson }},
+        datasets: [{
+            label: '展示次数',
+            data: {{ impressions| tojson }},
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+            }, {
+            label: '点击次数',
+            data: {{ clicks| tojson }},
+        borderColor: 'rgb(255, 99, 132)',
+        tension: 0.1
+            }]
+        },
+        options: {
+        responsive: true,
+        interaction: {
+            intersect: false,
+            mode: 'index'
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+    });
+});
+</script>
+{% endblock %}

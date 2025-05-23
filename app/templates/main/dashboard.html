@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}控制台 - 广告管理系统{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">账户余额</h5>
+                <h2 class="text-primary">¥{{ current_user.balance }}</h2>
+                <a href="{{ url_for('main.create_payment') }}" class="btn btn-primary mt-2">立即充值</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">广告数量</h5>
+                <h2 class="text-primary">{{ ads|length }}</h2>
+                <a href="{{ url_for('main.create_ad') }}" class="btn btn-primary mt-2">创建广告</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">总展示量</h5>
+                <h2 class="text-primary">{{ ads|sum(attribute='impressions') }}</h2>
+                <a href="#" class="btn btn-primary mt-2">查看详情</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">我的广告</h5>
+        <a href="{{ url_for('main.create_ad') }}" class="btn btn-primary btn-sm">创建广告</a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>类型</th>
+                        <th>状态</th>
+                        <th>展示量</th>
+                        <th>点击量</th>
+                        <th>点击率</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ad in ads %}
+                    <tr>
+                        <td>{{ ad.title }}</td>
+                        <td>{{ ad.ad_type }}</td>
+                        <td>
+                            <span class="badge {% if ad.status == 'active' %}bg-success
+                                            {% elif ad.status == 'pending' %}bg-warning
+                                            {% elif ad.status == 'rejected' %}bg-danger
+                                            {% else %}bg-secondary{% endif %}">
+                                {{ ad.status }}
+                            </span>
+                        </td>
+                        <td>{{ ad.impressions }}</td>
+                        <td>{{ ad.clicks }}</td>
+                        <td>{{ (ad.clicks / ad.impressions * 100)|round(2) if ad.impressions > 0 else 0 }}%</td>
+                        <td>
+                            <a href="{{ url_for('main.view_ad', id=ad.id) }}" class="btn btn-sm btn-info">查看</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

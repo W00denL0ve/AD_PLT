@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}{{ ad.title }} - 广告管理系统{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">广告详情</h4>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ ad.title }}</h5>
+                <p class="card-text">{{ ad.description }}</p>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <p><strong>广告类型：</strong>{{ ad.ad_type }}</p>
+                        <p><strong>状态：</strong>
+                            <span class="badge {% if ad.status == 'active' %}bg-success
+                                            {% elif ad.status == 'pending' %}bg-warning
+                                            {% elif ad.status == 'rejected' %}bg-danger
+                                            {% else %}bg-secondary{% endif %}">
+                                {{ ad.status }}
+                            </span>
+                        </p>
+                        <p><strong>开始日期：</strong>{{ ad.start_date.strftime('%Y-%m-%d') }}</p>
+                        <p><strong>结束日期：</strong>{{ ad.end_date.strftime('%Y-%m-%d') }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>预算：</strong>¥{{ ad.budget }}</p>
+                        <p><strong>已消耗：</strong>¥{{ ad.cost }}</p>
+                        <p><strong>展示量：</strong>{{ ad.impressions }}</p>
+                        <p><strong>点击量：</strong>{{ ad.clicks }}</p>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <h5>广告内容</h5>
+                    {% if ad.ad_type == 'banner' or ad.ad_type == 'popup' %}
+                    <img src="{{ ad.content_url }}" class="img-fluid" alt="{{ ad.title }}">
+                    {% elif ad.ad_type == 'video' %}
+                    <video src="{{ ad.content_url }}" controls class="img-fluid"></video>
+                    {% else %}
+                    <div class="alert alert-info">
+                        原生广告内容将在投放位置显示
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mt-4">
+                    <h5>目标链接</h5>
+                    <a href="{{ ad.target_url }}" target="_blank">{{ ad.target_url }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">统计数据</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="statsChart"></canvas>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">API信息</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>广告ID：</strong>{{ ad.id }}</p>
+                <p><strong>展示API：</strong></p>
+                <code>POST /api/ad/{{ ad.id }}/impression</code>
+                <p><strong>点击API：</strong></p>
+                <code>POST /api/ad/{{ ad.id }}/click</code>
+                <p><strong>统计API：</strong></p>
+                <code>GET /api/ad/{{ ad.id }}/stats</code>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('statsChart').getContext('2d');
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['展示量', '点击量'],
+            datasets: [{
+                label: '数据统计',
+                data: [{{ ad.impressions }}, {{ ad.clicks }}],
+        backgroundColor: [
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 99, 132, 0.2)'
+        ],
+        borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 99, 132, 1)'
+        ],
+        borderWidth: 1
+    }]
+    },
+    options: {
+        responsive: true,
+            scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endblock %}
