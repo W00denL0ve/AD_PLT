@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}充值 - 广告管理系统{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">账户充值</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="amount" class="form-label">充值金额</label>
+                        <div class="input-group">
+                            <span class="input-group-text">¥</span>
+                            <input type="number" class="form-control" id="amount" name="amount" step="0.01" min="1"
+                                required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="payment_method" class="form-label">支付方式</label>
+                        <select class="form-select" id="payment_method" name="payment_method" required>
+                            <option value="alipay">支付宝</option>
+                            <option value="wechat">微信支付</option>
+                            <option value="bank_transfer">银行转账</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">确认充值</button>
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-link">返回</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

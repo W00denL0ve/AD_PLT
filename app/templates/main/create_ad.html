@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}创建广告 - 广告管理系统{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">创建广告</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">广告标题</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">广告描述</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ad_type" class="form-label">广告类型</label>
+                        <select class="form-select" id="ad_type" name="ad_type" required>
+                            <option value="banner">横幅广告</option>
+                            <option value="popup">弹窗广告</option>
+                            <option value="video">视频广告</option>
+                            <option value="native">原生广告</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content_url" class="form-label">广告内容URL</label>
+                        <input type="url" class="form-control" id="content_url" name="content_url" required>
+                        <div class="form-text">图片、视频等广告内容的URL地址</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="target_url" class="form-label">目标URL</label>
+                        <input type="url" class="form-control" id="target_url" name="target_url" required>
+                        <div class="form-text">用户点击广告后跳转的URL地址</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="start_date" class="form-label">开始日期</label>
+                                <input type="date" class="form-control" id="start_date" name="start_date" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="end_date" class="form-label">结束日期</label>
+                                <input type="date" class="form-control" id="end_date" name="end_date" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="budget" class="form-label">预算金额</label>
+                        <div class="input-group">
+                            <span class="input-group-text">¥</span>
+                            <input type="number" class="form-control" id="budget" name="budget" step="0.01" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交审核</button>
+                    <a href="{{ url_for('main.dashboard') }}" class="btn btn-link">返回</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

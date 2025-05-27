@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}发票管理 - 广告管理系统{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h4 class="mb-0">发票管理</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>发票号</th>
+                        <th>用户</th>
+                        <th>金额</th>
+                        <th>类型</th>
+                        <th>单位名称</th>
+                        <th>税号</th>
+                        <th>状态</th>
+                        <th>申请时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for invoice in invoices %}
+                    <tr>
+                        <td>{{ invoice.invoice_number }}</td>
+                        <td>{{ invoice.user.username }}</td>
+                        <td>¥{{ invoice.amount }}</td>
+                        <td>
+                            {% if invoice.invoice_type == 'personal' %}
+                            个人发票
+                            {% else %}
+                            企业发票
+                            {% endif %}
+                        </td>
+                        <td>{{ invoice.company_name }}</td>
+                        <td>{{ invoice.tax_number or '-' }}</td>
+                        <td>
+                            <span class="badge {% if invoice.status == 'issued' %}bg-success
+                                            {% elif invoice.status == 'pending' %}bg-warning
+                                            {% else %}bg-danger{% endif %}">
+                                {{ invoice.status }}
+                            </span>
+                        </td>
+                        <td>{{ invoice.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>
+                            {% if invoice.status == 'pending' %}
+                            <form method="POST" action="{{ url_for('admin.review_invoice', id=invoice.id) }}"
+                                class="d-inline">
+                                <input type="hidden" name="action" value="approve">
+                                <button type="submit" class="btn btn-sm btn-success">开具</button>
+                            </form>
+                            <form method="POST" action="{{ url_for('admin.review_invoice', id=invoice.id) }}"
+                                class="d-inline">
+                                <input type="hidden" name="action" value="reject">
+                                <button type="submit" class="btn btn-sm btn-danger">拒绝</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

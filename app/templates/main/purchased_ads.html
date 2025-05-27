@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}已购买广告 - 广告管理系统{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">已购买广告</h5>
+            <a href="{{ url_for('main.create_ad') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> 创建新广告
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>标题</th>
+                            <th>类型</th>
+                            <th>开始日期</th>
+                            <th>结束日期</th>
+                            <th>预算</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ad in ads %}
+                        <tr>
+                            <td>{{ ad.id }}</td>
+                            <td>{{ ad.title }}</td>
+                            <td>
+                                {% if ad.ad_type == 'banner' %}
+                                <span class="badge bg-info">横幅广告</span>
+                                {% elif ad.ad_type == 'video' %}
+                                <span class="badge bg-warning">视频广告</span>
+                                {% elif ad.ad_type == 'native' %}
+                                <span class="badge bg-success">原生广告</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ ad.start_date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ ad.end_date.strftime('%Y-%m-%d') }}</td>
+                            <td>¥{{ "%.2f"|format(ad.budget) }}</td>
+                            <td>
+                                {% if ad.status == 'active' %}
+                                <span class="badge bg-success">投放中</span>
+                                {% elif ad.status == 'pending' %}
+                                <span class="badge bg-warning">待审核</span>
+                                {% elif ad.status == 'rejected' %}
+                                <span class="badge bg-danger">已拒绝</span>
+                                {% elif ad.status == 'completed' %}
+                                <span class="badge bg-secondary">已结束</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ url_for('main.view_ad', id=ad.id) }}"
+                                        class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-eye"></i> 查看
+                                    </a>
+                                    {% if ad.status == 'active' %}
+                                    <a href="{{ url_for('main.ad_stats', id=ad.id) }}"
+                                        class="btn btn-sm btn-outline-info">
+                                        <i class="fas fa-chart-line"></i> 统计
+                                    </a>
+                                    {% endif %}
+                                    {% if ad.status == 'pending' %}
+                                    <form action="{{ url_for('main.withdraw_ad', id=ad.id) }}" method="POST"
+                                        class="d-inline" onsubmit="return confirm('确定要撤回此广告吗？');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i> 撤回
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

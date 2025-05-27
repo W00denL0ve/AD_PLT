@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}支付管理 - 广告管理系统{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h4 class="mb-0">支付管理</h4>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>交易号</th>
+                        <th>用户</th>
+                        <th>金额</th>
+                        <th>支付方式</th>
+                        <th>状态</th>
+                        <th>时间</th>
+                        <th>发票</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments %}
+                    <tr>
+                        <td>{{ payment.transaction_id }}</td>
+                        <td>{{ payment.user.username }}</td>
+                        <td>¥{{ payment.amount }}</td>
+                        <td>
+                            {% if payment.payment_method == 'alipay' %}
+                            支付宝
+                            {% elif payment.payment_method == 'wechat' %}
+                            微信支付
+                            {% else %}
+                            银行转账
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge {% if payment.status == 'success' %}bg-success
+                                            {% elif payment.status == 'pending' %}bg-warning
+                                            {% else %}bg-danger{% endif %}">
+                                {{ payment.status }}
+                            </span>
+                        </td>
+                        <td>{{ payment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>
+                            {% if payment.invoices %}
+                            <span class="badge bg-info">已开具</span>
+                            {% else %}
+                            <span class="badge bg-secondary">未开具</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
