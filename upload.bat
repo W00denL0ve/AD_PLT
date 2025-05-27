@@ -8,7 +8,7 @@ REM 添加所有更改
 git add .
 
 REM 提交更改，提交信息为当前日期时间
-git commit -m "自动提交 %date% %time%"
+git commit -m "ninghai %date% %time%"
 
 REM 设置远程仓库（如已设置可忽略此行）
 git remote add origin %REPO% 2>nul
