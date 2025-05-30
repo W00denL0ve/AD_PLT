@@ -27,7 +27,7 @@
             <div class="card-body">
                 <h5 class="card-title">总展示量</h5>
                 <h2 class="text-primary">{{ ads|sum(attribute='impressions') }}</h2>
-                <a href="#" class="btn btn-primary mt-2">查看详情</a>
+                <a href="{{url_for('main.purchased_ads')}}" class="btn btn-primary mt-2">查看详情</a>
             </div>
         </div>
     </div>

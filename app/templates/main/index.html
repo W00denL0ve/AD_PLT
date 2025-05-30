@@ -14,7 +14,7 @@
                     {% if not current_user.is_authenticated %}
                     <div class="d-flex gap-3">
                         <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">立即开始</a>
-                        <a href="{{ url_for('auth.register') }}" class="btn btn-outline-dark btn-lg">了解更多</a>
+                        <a href="/api-docs" class="btn btn-outline-dark btn-lg">了解更多</a>
                     </div>
                     {% else %}
                     <div>

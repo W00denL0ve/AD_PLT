@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('main.index') }}">广告管理系统</a>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">广告管理系统首页</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -20,22 +20,22 @@
                 <ul class="navbar-nav me-auto">
                     {% if current_user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.dashboard') }}">
+                        <a class="nav-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}" href="{{ url_for('main.dashboard') }}">
                             <i class="fas fa-tachometer-alt"></i> 个人中心
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.purchased_ads') }}">
+                        <a class="nav-link {% if request.endpoint == 'main.purchased_ads' %}active{% endif %}" href="{{ url_for('main.purchased_ads') }}">
                             <i class="fas fa-ad"></i> 已购买广告
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.payment_history') }}">
+                        <a class="nav-link {% if request.endpoint == 'main.payment_history' %}active{% endif %}" href="{{ url_for('main.payment_history') }}">
                             <i class="fas fa-history"></i> 充值记录
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('main.invoice_history') }}">发票记录</a>
+                        <a class="nav-link {% if request.endpoint == 'main.invoice_history' %}active{% endif %}" href="{{ url_for('main.invoice_history') }}">发票记录</a>
                     </li>
                     {% endif %}
                     {% if current_user.is_authenticated and current_user.is_admin %}
@@ -53,7 +53,7 @@
                         <a class="nav-link " tabindex="-1" aria-disabled="true" href="{{ url_for('main.dashboard') }}">{{ current_user.username }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('auth.logout') }}">退出登录</a>
+                        <a class="nav-link" href="{{ url_for('auth.logout') }}" onclick="return confirm('确定要退出登录吗？');">退出登录</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
