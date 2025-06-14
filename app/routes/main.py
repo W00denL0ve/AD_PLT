@@ -21,6 +21,14 @@ def dashboard():
 @login_required
 def create_ad():
     if request.method == 'POST':
+        budget = float(request.form.get('budget', 0))
+        if budget < 0:
+            flash('请输入正确的预算金额。', 'danger')
+            return render_template('main/create_ad.html')
+        if current_user.balance < budget:
+            flash('余额不足，请先充值后再提交广告。', 'danger')
+            return redirect(url_for('main.create_payment'))
+        
         ad = Advertisement(
             title=request.form.get('title'),
             description=request.form.get('description'),
@@ -29,13 +37,18 @@ def create_ad():
             target_url=request.form.get('target_url'),
             start_date=datetime.strptime(request.form.get('start_date'), '%Y-%m-%d'),
             end_date=datetime.strptime(request.form.get('end_date'), '%Y-%m-%d'),
-            budget=float(request.form.get('budget')),
+            budget=budget,
             status='pending',
             user_id=current_user.id
         )
         db.session.add(ad)
         db.session.commit()
-        flash('广告创建成功，等待审核')
+        
+        # 扣除用户余额
+        current_user.balance -= budget
+        db.session.commit()
+        
+        flash('广告提交成功，等待审核。', 'success')
         return redirect(url_for('main.dashboard'))
     return render_template('main/create_ad.html')
 
@@ -196,4 +209,4 @@ def withdraw_ad(id):
     db.session.delete(ad)
     db.session.commit()
     flash('广告已成功撤回')
-    return redirect(url_for('main.purchased_ads')) 
+    return redirect(url_for('main.purchased_ads'))
